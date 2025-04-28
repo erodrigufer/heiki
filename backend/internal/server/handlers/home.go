@@ -7,7 +7,7 @@ import (
 	"github.com/erodrigufer/serenitynow/internal/web"
 )
 
-func (h *Handlers) HandleGetHome() http.HandlerFunc {
+func (h *Handlers) GetHome() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		err := web.RenderComponent(r.Context(), w, views.Home())
 		if err != nil {

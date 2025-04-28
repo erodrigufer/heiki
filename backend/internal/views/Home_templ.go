@@ -41,7 +41,7 @@ func Home() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h1>serenity now </h1>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("Login")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

@@ -6,7 +6,7 @@ import (
 	"github.com/erodrigufer/serenitynow/internal/web"
 )
 
-func (h *Handlers) HandleGetHealth() http.HandlerFunc {
+func (h *Handlers) GetHealth() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		response := map[string]string{
 			"Status": "ok",

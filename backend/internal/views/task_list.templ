@@ -1,0 +1,29 @@
+package views
+
+import "github.com/erodrigufer/serenitynow/internal/tasks"
+
+templ taskList(tasks []tasks.Task) {
+	<ul>
+		for _, task := range tasks {
+			<li>
+				@taskFormatter(task)
+			</li>
+		}
+	</ul>
+}
+
+templ taskFormatter(task tasks.Task) {
+	if task.Completed {
+		x&nbsp;
+	}
+	if task.Priority != "" {
+		({ task.Priority })
+	}
+	{ task.Description }
+	for _, project := range task.Projects {
+		<span class="labels projects">{ "+" }{ project }</span>&nbsp;
+	}
+	for _, context := range task.Contexts {
+		<span class="labels contexts">{ "@" }{ context }</span>&nbsp;
+	}
+}

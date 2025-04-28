@@ -21,8 +21,10 @@ func (app *Application) routes() http.Handler {
 	}
 
 	mux.Handle("GET /static/", fileServer)
-	mux.Handle("GET /api/v1/health", h.HandleGetHealth())
-	mux.Handle("GET /", h.HandleGetHome())
+	mux.Handle("GET /api/v1/health", h.GetHealth())
+	mux.Handle("GET /", h.GetHome())
+	mux.Handle("GET /tasks", h.GetTasks())
+	mux.Handle("POST /tasks", h.PostTasks())
 
 	return middlewareChain(mux)
 }
