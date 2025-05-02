@@ -14,3 +14,6 @@ go.work.sum
 # env file
 .env
 .envrc
+
+# sqlite3 dbs.
+*.db
