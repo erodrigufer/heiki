@@ -17,3 +17,6 @@ go.work.sum
 
 # sqlite3 dbs.
 *.db
+
+# dbmate schema file.
+db/schema.sql
