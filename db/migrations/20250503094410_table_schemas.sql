@@ -1,0 +1,46 @@
+-- migrate:up
+CREATE TABLE IF NOT EXISTS tasks (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  completed INTEGER NOT NULL, -- BOOLEAN type
+  priority TEXT NOT NULL,
+  description TEXT NOT NULL,
+  createdAt TEXT NOT NULL, -- DATE type
+  dueAt TEXT, -- DATE type
+  completedAt TEXT -- DATE type
+) STRICT;
+
+CREATE TABLE IF NOT EXISTS projects (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL UNIQUE,
+  createdAT TEXT NOT NULL -- DATE type
+) STRICT;
+
+CREATE TABLE IF NOT EXISTS projects_by_task (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  task_id INTEGER NOT NULL,
+  project_id INTEGER NOT NULL,
+  FOREIGN KEY(task_id) REFERENCES tasks(id),
+  FOREIGN KEY(project_id) REFERENCES projects(id)
+) STRICT;
+
+CREATE TABLE IF NOT EXISTS contexts (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL UNIQUE,
+  createdAT TEXT NOT NULL -- DATE type
+) STRICT;
+
+CREATE TABLE IF NOT EXISTS contexts_by_task (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  task_id INTEGER NOT NULL,
+  context_id INTEGER NOT NULL,
+  FOREIGN KEY(task_id) REFERENCES tasks(id),
+  FOREIGN KEY(context_id) REFERENCES contexts(id)
+) STRICT;
+
+
+-- migrate:down
+DROP TABLE IF EXISTS tasks CASCADE;
+DROP TABLE IF EXISTS projects CASCADE;
+DROP TABLE IF EXISTS projects_by_task CASCADE;
+DROP TABLE IF EXISTS contexts CASCADE;
+DROP TABLE IF EXISTS contexts_by_task CASCADE;
