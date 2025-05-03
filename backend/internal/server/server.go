@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"log/slog"
 	"net/http"
@@ -9,8 +10,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/spf13/viper"
+	_ "modernc.org/sqlite"
 )
 
 type Application struct {
@@ -21,8 +22,8 @@ type Application struct {
 	InfoLog *slog.Logger
 	// config centrally manages env. variables.
 	config *viper.Viper
-	// pgDB connection pool for postgres DB.
-	pgDB *pgxpool.Pool
+	// db connection.
+	db *sql.DB
 }
 
 func NewApplication(ctx context.Context, requiredEnvVariables []string) (*Application, error) {
@@ -39,17 +40,35 @@ func NewApplication(ctx context.Context, requiredEnvVariables []string) (*Applic
 		return nil, fmt.Errorf("failed to setup the loggers: %w", err)
 	}
 
-	// err = app.setupDBConnectionPool(ctx)
-	// if err != nil {
-	// 	return nil, fmt.Errorf("failed to establish a DB connection pool: %w", err)
-	// }
-
 	err = app.setupServerParameters()
 	if err != nil {
 		return nil, fmt.Errorf("unable to setup the server's parameters: %w", err)
 	}
 
+	err = app.startDBConnection(ctx)
+	if err != nil {
+		return nil, err
+	}
+
 	return app, nil
+}
+
+func (app *Application) startDBConnection(ctx context.Context) error {
+	sqliteDBPath, err := app.GetConfigValueString("SQLITE_PATH")
+	if err != nil {
+		return err
+	}
+	app.db, err = sql.Open("sqlite", sqliteDBPath)
+	if err != nil {
+		return fmt.Errorf("unable to establish a connection with DB: %w", err)
+	}
+
+	if err := app.db.PingContext(ctx); err != nil {
+		return fmt.Errorf("unable to ping db: %w", err)
+	}
+
+	app.InfoLog.Info("Successfully pinged sqlite3 db", slog.String("sqlite_file_path", sqliteDBPath))
+	return nil
 }
 
 // StartServerWithGracefulShutdown starts a server and gracefully handles shutdowns.
@@ -98,8 +117,8 @@ func (app *Application) StartServerWithGracefulShutdown(ctx context.Context) {
 	go func() {
 		defer wg.Done()
 		<-ctx.Done()
-		app.InfoLog.Info("closing pg db connection pool")
-		app.pgDB.Close()
+		app.InfoLog.Info("closing sqlite db connection")
+		app.db.Close()
 	}()
 
 	// Wait on all goroutines performing asynchronous shutdowns before returning.
@@ -117,24 +136,6 @@ func (app *Application) setupLoggers() error {
 	app.InfoLog = app.InfoLog.With("environment", environmentValue)
 	app.ErrorLog = app.ErrorLog.With("environment", environmentValue)
 
-	return nil
-}
-
-func (app *Application) setupDBConnectionPool(ctx context.Context) error {
-	pgConnString, err := app.GetConfigValueString("PG_DB_CONN_STRING")
-	if err != nil {
-		return fmt.Errorf("unable to get config value: %w", err)
-	}
-	app.pgDB, err = pgxpool.New(ctx, pgConnString)
-	if err != nil {
-		return fmt.Errorf("could not establish database connection pool: %w", err)
-	}
-	err = app.pgDB.Ping(ctx)
-	if err != nil {
-		return fmt.Errorf("db unreachable, pinging db failed: %w", err)
-	}
-
-	app.InfoLog.Info("Successfully pinged db.")
 	return nil
 }
 
