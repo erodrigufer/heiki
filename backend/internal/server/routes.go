@@ -12,7 +12,7 @@ func (app *Application) routes() http.Handler {
 
 	m := middlewares.NewMiddlewares(app.InfoLog, app.ErrorLog)
 
-	h := handlers.NewHandlers(app.InfoLog, app.ErrorLog)
+	h := handlers.NewHandlers(app.InfoLog, app.ErrorLog, app.db)
 
 	fileServer := http.StripPrefix("/static", http.FileServer(http.Dir("./static")))
 

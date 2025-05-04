@@ -1,54 +1,57 @@
 package handlers
 
 import (
-	"cmp"
 	"log/slog"
 	"net/http"
-	"slices"
 	"time"
 
-	"github.com/erodrigufer/serenitynow/internal/tasks"
 	"github.com/erodrigufer/serenitynow/internal/views"
 	"github.com/erodrigufer/serenitynow/internal/web"
 )
 
 func (h *Handlers) GetTasks() http.HandlerFunc {
-	task1 := tasks.Task{Priority: "B", Description: "Buy a new notebook"}
-
-	task6 := tasks.Task{Priority: "C", Description: "Find a new スマホ"}
-	task2 := tasks.Task{Priority: "A", Description: "Insurance claim", Contexts: []string{"5分", "メール"}}
-
-	task3 := tasks.Task{Completed: true, Description: "Send gift to X", Contexts: []string{"仕事"}}
-	task4 := tasks.Task{Description: "Implement MVP backend template renderer", Contexts: []string{"programming"}, Projects: []string{"serenitynow"}}
-
-	task5 := tasks.Task{Priority: "B", Description: "Buy train ticket", Contexts: []string{"Conference25", "仕事"}}
-
-	tasks := []tasks.Task{task1, task2, task3, task4, task5, task6}
-
-	tasks = sortTasksByPriority(tasks)
+	// task1 := tasks.Task{Priority: "B", Description: "Buy a new notebook"}
+	//
+	// task6 := tasks.Task{Priority: "C", Description: "Find a new スマホ"}
+	// task2 := tasks.Task{Priority: "A", Description: "Insurance claim", Contexts: []string{"5分", "メール"}}
+	//
+	// task3 := tasks.Task{Completed: true, Description: "Send gift to X", Contexts: []string{"仕事"}}
+	// task4 := tasks.Task{Description: "Implement MVP backend template renderer", Contexts: []string{"programming"}, Projects: []string{"serenitynow"}}
+	//
+	// task5 := tasks.Task{Priority: "B", Description: "Buy train ticket", Contexts: []string{"Conference25", "仕事"}}
+	//
+	// tasks := []tasks.Task{task1, task2, task3, task4, task5, task6}
+	//
+	// tasks = sortTasksByPriority(tasks)
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		err := web.RenderComponent(r.Context(), w, views.Tasks(tasks))
+		tasks, err := h.sm.GetAllTasks(r.Context())
 		if err != nil {
 			web.HandleServerError(w, r, err, h.errorLog)
+			return
+		}
+		err = web.RenderComponent(r.Context(), w, views.Tasks(tasks))
+		if err != nil {
+			web.HandleServerError(w, r, err, h.errorLog)
+			return
 		}
 	}
 }
 
-func sortTasksByPriority(ts []tasks.Task) []tasks.Task {
-	cmpFn := func(a, b tasks.Task) int {
-		// Tasks with no Priority field should be sorted to the bottom.
-		if a.Priority == "" {
-			return 1
-		}
-		if b.Priority == "" {
-			return -1
-		}
-		return cmp.Compare(a.Priority, b.Priority)
-	}
-	slices.SortStableFunc(ts, cmpFn)
-	return ts
-}
+// func sortTasksByPriority(ts []tasks.Task) []tasks.Task {
+// 	cmpFn := func(a, b tasks.Task) int {
+// 		// Tasks with no Priority field should be sorted to the bottom.
+// 		if a.Priority == "" {
+// 			return 1
+// 		}
+// 		if b.Priority == "" {
+// 			return -1
+// 		}
+// 		return cmp.Compare(a.Priority, b.Priority)
+// 	}
+// 	slices.SortStableFunc(ts, cmpFn)
+// 	return ts
+// }
 
 func (h *Handlers) PostTasks() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -69,6 +72,12 @@ func (h *Handlers) PostTasks() http.HandlerFunc {
 		}
 
 		h.infoLog.Info("received a task", slog.String("description", description), slog.String("priority", priority), slog.Time("dueDate", dueDate))
+
+		err = h.sm.InsertTask(r.Context(), priority, description)
+		if err != nil {
+			web.HandleServerError(w, r, err, h.errorLog)
+			return
+		}
 
 		web.HandleOK(w, r, h.errorLog)
 	}

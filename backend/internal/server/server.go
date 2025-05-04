@@ -40,14 +40,14 @@ func NewApplication(ctx context.Context, requiredEnvVariables []string) (*Applic
 		return nil, fmt.Errorf("failed to setup the loggers: %w", err)
 	}
 
-	err = app.setupServerParameters()
-	if err != nil {
-		return nil, fmt.Errorf("unable to setup the server's parameters: %w", err)
-	}
-
 	err = app.startDBConnection(ctx)
 	if err != nil {
 		return nil, err
+	}
+
+	err = app.setupServerParameters()
+	if err != nil {
+		return nil, fmt.Errorf("unable to setup the server's parameters: %w", err)
 	}
 
 	return app, nil
