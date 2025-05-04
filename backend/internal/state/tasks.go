@@ -15,8 +15,15 @@ var insertTaskQuery string
 //go:embed getAllTasks.sql
 var getAllTasksQuery string
 
-func (sm *StateManager) InsertTask(ctx context.Context, priority, description string) error {
-	_, err := sm.ExecContext(ctx, insertTaskQuery, priority, description, nil, nil)
+func (sm *StateManager) InsertTask(ctx context.Context, priority, description, dueDate string) error {
+	var dueDatePtr *string
+	// If dueDate is an empty string, store a NULL value.
+	if dueDate == "" {
+		dueDatePtr = nil
+	} else {
+		dueDatePtr = &dueDate
+	}
+	_, err := sm.ExecContext(ctx, insertTaskQuery, priority, description, dueDatePtr, nil)
 	if err != nil {
 		return fmt.Errorf("unable to insert task in db: %w", err)
 	}

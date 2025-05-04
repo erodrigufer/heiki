@@ -1,9 +1,7 @@
 package handlers
 
 import (
-	"log/slog"
 	"net/http"
-	"time"
 
 	"github.com/erodrigufer/serenitynow/internal/views"
 	"github.com/erodrigufer/serenitynow/internal/web"
@@ -65,15 +63,7 @@ func (h *Handlers) PostTasks() http.HandlerFunc {
 		priority := r.PostForm.Get("priority")
 		dueDateStr := r.PostForm.Get("due-date")
 
-		dueDate, err := time.Parse("2006-01-02", dueDateStr)
-		if err != nil && dueDateStr != "" {
-			web.HandleBadRequest(w, "unable to parse due date value")
-			return
-		}
-
-		h.infoLog.Info("received a task", slog.String("description", description), slog.String("priority", priority), slog.Time("dueDate", dueDate))
-
-		err = h.sm.InsertTask(r.Context(), priority, description)
+		err = h.sm.InsertTask(r.Context(), priority, description, dueDateStr)
 		if err != nil {
 			web.HandleServerError(w, r, err, h.errorLog)
 			return
