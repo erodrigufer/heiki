@@ -24,22 +24,27 @@ templ:
 clean:
   cd backend && rm -rf ./tmp
 
-# Run database migrations.
-[group('dbmate')]
+# open sqlite cli.
+[group('sql')]
+sql:
+  cd db && sqlite3 database.sqlite3
+
+# run database migrations.
+[group('sql')]
 migrate: 
     dbmate {{DBMATE_GENERAL_OPTIONS}} up
 
-# Rollback the last database migration.
-[group('dbmate')]
+# rollback the last database migration.
+[group('sql')]
 rollback: 
     dbmate {{DBMATE_GENERAL_OPTIONS}} rollback
 
-# Drop the db managed by dbmate.
-[group('dbmate')]
+# drop the db managed by dbmate.
+[group('sql')]
 drop:
     dbmate {{DBMATE_GENERAL_OPTIONS}} drop
 
-# Create a new migration file with name `MIGRATION_NAME`.
-[group('dbmate')]
+# create a new migration file with name `MIGRATION_NAME`.
+[group('sql')]
 new MIGRATION_NAME:
   dbmate {{DBMATE_GENERAL_OPTIONS}} new {{MIGRATION_NAME}}
