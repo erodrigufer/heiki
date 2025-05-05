@@ -1,0 +1,27 @@
+package views
+
+templ Login() {
+	@base() {
+		<form class="login" action="/login" method="POST">
+			<div class="box-flex-row-center">
+				<input type="text" placeholder="Username" name="username" autofocus required/>
+			</div>
+			<div class="box-flex-row-center">
+				<input type="password" placeholder="Password" name="password" required/>
+			</div>
+			<div class="box-flex-row-center">
+				<button
+					class="auth-btn login-btn"
+					hx-post="/login"
+					hx-target="body"
+					hx-target-error="#auth-error"
+					hx-swap="innerHTML"
+					hx-push-url="true"
+				>
+					Login
+				</button>
+			</div>
+			<div id="auth-error"></div>
+		</form>
+	}
+}

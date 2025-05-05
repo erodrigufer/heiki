@@ -3,6 +3,7 @@ package web
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log/slog"
 	"net/http"
 	"path/filepath"
@@ -124,4 +125,14 @@ func HandleServerError(w http.ResponseWriter, r *http.Request, err error, errorL
 	LogErrorsWithStack(r.Context(), "an internal server error happened", false, err, errorLogger)
 
 	http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+}
+
+func SendHTMXErrorMessage(w http.ResponseWriter, r *http.Request, statusCode int, errorLogger *slog.Logger, errorMessage string) {
+	h := w.Header()
+	h.Set("Content-Type", "text/html; charset=utf-8")
+	w.WriteHeader(statusCode)
+	_, err := fmt.Fprintln(w, errorMessage)
+	if err != nil {
+		HandleServerError(w, r, fmt.Errorf("could not write to http.ResponseWriter: %w", err), errorLogger)
+	}
 }

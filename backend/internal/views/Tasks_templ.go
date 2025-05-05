@@ -43,11 +43,15 @@ func Tasks(tasks []tasks.Task) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<button class=\"auth-btn logout-btn\" hx-boost=\"false\" hx-post=\"/logout\" hx-push-url=\"true\" hx-swap=\"innerHTML\" hx-target=\"body\">Logout</button>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
 			templ_7745c5c3_Err = taskList(tasks).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, " ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, " ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -86,7 +90,7 @@ func taskSubmit() templ.Component {
 			templ_7745c5c3_Var3 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<form action=\"/tasks\" method=\"POST\"><div><div><label for=\"task-priority-select\">Choose a task priority:</label></div><select id=\"task-priority-select\" name=\"priority\"><option value=\"\">Please choose a priority</option> <option value=\"A\">A</option> <option value=\"B\">B</option> <option value=\"C\">C</option> <option value=\"D\">D</option> <option value=\"\">No priority</option></select></div><div><input type=\"text\" placeholder=\"Task description...\" name=\"description\" autofocus required></div><div><input type=\"date\" name=\"due-date\"></div><div><button hx-post=\"/tasks\" hx-push-url=\"true\">Submit task</button></div></form>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<form action=\"/tasks\" method=\"POST\"><div><div><label for=\"task-priority-select\">Choose a task priority:</label></div><select id=\"task-priority-select\" name=\"priority\"><option value=\"\">Please choose a priority</option> <option value=\"A\">A</option> <option value=\"B\">B</option> <option value=\"C\">C</option> <option value=\"D\">D</option> <option value=\"\">No priority</option></select></div><div><input type=\"text\" placeholder=\"Task description...\" name=\"description\" autofocus required></div><div><input type=\"date\" name=\"due-date\"></div><div><button hx-post=\"/tasks\" hx-push-url=\"true\">Submit task</button></div></form>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

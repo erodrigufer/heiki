@@ -12,7 +12,10 @@ import (
 func main() {
 	ctx := context.Background()
 
-	requiredEnvVariables := []string{"PORT", "ENVIRONMENT", "SQLITE_PATH"}
+	requiredEnvVariables := []string{
+		"PORT", "ENVIRONMENT", "SQLITE_PATH", "DISABLE_AUTH",
+		"AUTH_USERNAME", "AUTH_PASSWORD",
+	}
 	if err := run(ctx, requiredEnvVariables); err != nil {
 		fmt.Fprintf(os.Stderr, "%s\n", err)
 		os.Exit(1)

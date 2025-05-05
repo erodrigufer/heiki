@@ -8,18 +8,18 @@ import (
 
 templ base() {
 	<!DOCTYPE html>
-	<html lang="es">
+	<html>
 		<meta name="description" content="easycop"/>
 		<head>
 			<meta charset="utf-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-			// TODO: pick a theme-color
 			<meta name="theme-color" content="#470DAC"/>
 			<link rel="stylesheet" href="/static/base.css"/>
 			<title>serenitynow</title>
-			<script src="https://unpkg.com/htmx.org@2.0.4"></script>
+			<script src="https://unpkg.com/htmx.org@2.0.4" integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+" crossorigin="anonymous"></script>
+			<script src="https://unpkg.com/htmx-ext-response-targets@2.0.2" crossorigin="anonymous"></script>
 		</head>
-		<body>
+		<body hx-ext="response-targets">
 			<h1>serenity now </h1>
 			<h2>Friendly task manager ー 自分用やさしい仕事のノート </h2>
 			<p>{ monday.Format(time.Now(), monday.DefaultFormatJaJPLong , monday.LocaleJaJP) }</p>

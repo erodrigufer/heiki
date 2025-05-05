@@ -33,3 +33,10 @@ func (app *Application) GetConfigValueString(key string) (string, error) {
 	}
 	return app.config.GetString(key), nil
 }
+
+func (app *Application) GetConfigValueBool(key string) (bool, error) {
+	if !app.config.IsSet(key) {
+		return false, fmt.Errorf("env. configuration value (`%s`) is not set", key)
+	}
+	return app.config.GetBool(key), nil
+}

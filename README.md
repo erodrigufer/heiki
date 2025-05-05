@@ -17,9 +17,13 @@
 ## Environment variables
 
 ```bash
-# ---- Application ---
+# ---- Application ----
 export ENVIRONMENT="local"
 export PORT=":80"
-export DATABASE_URL="sqlite:db/database.sqlite3" # required for dbmate
 export SQLITE_PATH="<path to local db for dev>"
+export DISABLE_AUTH="<true | false>"
+export AUTH_USERNAME
+export AUTH_PASSWORD
+# ---- dbmate ----
+export DATABASE_URL="sqlite:db/database.sqlite3"
 ```

@@ -10,6 +10,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/alexedwards/scs/v2"
 	"github.com/spf13/viper"
 	_ "modernc.org/sqlite"
 )
@@ -23,7 +24,8 @@ type Application struct {
 	// config centrally manages env. variables.
 	config *viper.Viper
 	// db connection.
-	db *sql.DB
+	db             *sql.DB
+	sessionManager *scs.SessionManager
 }
 
 func NewApplication(ctx context.Context, requiredEnvVariables []string) (*Application, error) {
@@ -42,8 +44,12 @@ func NewApplication(ctx context.Context, requiredEnvVariables []string) (*Applic
 
 	err = app.startDBConnection(ctx)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to start a db connection: %w", err)
 	}
+
+	app.sessionManager = scs.New()
+	app.sessionManager.Lifetime = 7 * 24 * time.Hour
+	app.sessionManager.IdleTimeout = 7 * 24 * time.Hour
 
 	err = app.setupServerParameters()
 	if err != nil {
@@ -147,10 +153,16 @@ func (app *Application) setupServerParameters() error {
 	if err != nil {
 		return fmt.Errorf("unable to get config value: %w", err)
 	}
+
+	endpoints, err := app.defineEndpoints()
+	if err != nil {
+		return fmt.Errorf("unable to define endpoints: %w", err)
+	}
+
 	app.srv = &http.Server{
 		Addr:     portValue,
 		ErrorLog: compatibleLogger,
-		Handler:  app.routes(),
+		Handler:  endpoints,
 		// Time after which inactive keep-alive connections will be closed.
 		IdleTimeout: time.Minute,
 		// Max. time to read the header and body of a request in the server.
