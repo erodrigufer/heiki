@@ -44,7 +44,7 @@ func (h *Handlers) PostLogin(authorizedUsername, authorizedPassword string) http
 		// Make the privilege-level change.
 		h.sessionManager.Put(r.Context(), "userID", username)
 
-		http.Redirect(w, r, "/", http.StatusSeeOther)
+		http.Redirect(w, r, "/tasks", http.StatusSeeOther)
 	}
 }
 
