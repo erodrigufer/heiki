@@ -15,6 +15,9 @@ var insertTaskQuery string
 //go:embed getAllTasks.sql
 var getAllTasksQuery string
 
+//go:embed updateCompletedTask.sql
+var updateCompletedTaskQuery string
+
 func (sm *StateManager) InsertTask(ctx context.Context, priority, description, dueDate string) error {
 	var dueDatePtr *string
 	// If dueDate is an empty string, store a NULL value.
@@ -56,6 +59,14 @@ func (sm *StateManager) GetAllTasks(ctx context.Context) ([]tasks.Task, error) {
 		allTasks = append(allTasks, tParsed)
 	}
 	return allTasks, nil
+}
+
+func (sm *StateManager) UpdateCompletedTask(ctx context.Context, completed bool, id int) error {
+	_, err := sm.ExecContext(ctx, updateCompletedTaskQuery, completed, id)
+	if err != nil {
+		return fmt.Errorf("unable to update completed column of task: %w", err)
+	}
+	return nil
 }
 
 func parseSqliteDate(date *string) (time.Time, error) {

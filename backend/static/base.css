@@ -44,3 +44,7 @@ h1 {
   --contexts-bg-color: hsl(80, 100%, 70%);
   background-color: var(--contexts-bg-color);
 }
+
+ul.tasks-list {
+  list-style-type: none;
+}

@@ -23,7 +23,9 @@ templ base() {
 			<h1>serenity now </h1>
 			<h2>Friendly task manager ー 自分用やさしい仕事のノート </h2>
 			<p>{ monday.Format(time.Now(), monday.DefaultFormatJaJPLong , monday.LocaleJaJP) }</p>
-			{ children... }
+			<main>
+				{ children... }
+			</main>
 		</body>
 		<footer>
 			Developed by <a href="https://github.com/erodrigufer" target="_blank">Eduardo Rodriguez </a> &copy; { 

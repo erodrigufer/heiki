@@ -2,19 +2,23 @@ package views
 
 import "github.com/erodrigufer/serenitynow/internal/tasks"
 
-templ Tasks(tasks []tasks.Task) {
+templ TasksPageView(tasks []tasks.Task) {
 	@base() {
-		<button
-			class="auth-btn logout-btn"
-			hx-boost="false"
-			hx-post="/logout"
-			hx-push-url="true"
-			hx-swap="innerHTML"
-			hx-target="body"
-		>Logout</button>
-		@taskList(tasks)
-		@taskSubmit()
+		@TasksPageContent(tasks)
 	}
+}
+
+templ TasksPageContent(tasks []tasks.Task) {
+	<button
+		class="auth-btn logout-btn"
+		hx-boost="false"
+		hx-post="/logout"
+		hx-push-url="true"
+		hx-swap="innerHTML"
+		hx-target="body"
+	>Logout</button>
+	@taskList(tasks)
+	@taskSubmit()
 }
 
 templ taskSubmit() {

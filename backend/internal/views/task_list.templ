@@ -1,9 +1,10 @@
 package views
 
 import "github.com/erodrigufer/serenitynow/internal/tasks"
+import "fmt"
 
 templ taskList(tasks []tasks.Task) {
-	<ul>
+	<ul class="tasks-list">
 		for _, task := range tasks {
 			<li>
 				@taskFormatter(task)
@@ -13,9 +14,13 @@ templ taskList(tasks []tasks.Task) {
 }
 
 templ taskFormatter(task tasks.Task) {
-	if task.Completed {
-		x&nbsp;
-	}
+	<input
+		type="checkbox"
+		name={ task.ID }
+		checked?={ task.Completed }
+		hx-target="main"
+		hx-put={ fmt.Sprintf("/tasks/%d?completed=%t", task.ID, !task.Completed) }
+	/>
 	if task.Priority != "" {
 		({ task.Priority })
 	}
