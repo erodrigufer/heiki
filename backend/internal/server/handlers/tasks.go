@@ -69,6 +69,6 @@ func (h *Handlers) PostTasks() http.HandlerFunc {
 			return
 		}
 
-		web.HandleOK(w, r, h.errorLog)
+		http.Redirect(w, r, "/tasks", http.StatusSeeOther)
 	}
 }
