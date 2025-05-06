@@ -62,7 +62,13 @@ func (sm *StateManager) GetAllTasks(ctx context.Context) ([]tasks.Task, error) {
 }
 
 func (sm *StateManager) UpdateCompletedTask(ctx context.Context, completed bool, id int) error {
-	_, err := sm.ExecContext(ctx, updateCompletedTaskQuery, completed, id)
+	var err error
+	if completed {
+		completedAt := time.Now().Format("2006-01-02")
+		_, err = sm.ExecContext(ctx, updateCompletedTaskQuery, completed, completedAt, id)
+	} else {
+		_, err = sm.ExecContext(ctx, updateCompletedTaskQuery, completed, nil, id)
+	}
 	if err != nil {
 		return fmt.Errorf("unable to update completed column of task: %w", err)
 	}
@@ -75,7 +81,7 @@ func parseSqliteDate(date *string) (time.Time, error) {
 	}
 	parsedDate, err := time.Parse("2006-01-02", *date)
 	if err != nil {
-		return time.Time{}, err
+		return time.Time{}, fmt.Errorf("unable to parse date: %w", err)
 	}
 	return parsedDate, nil
 }

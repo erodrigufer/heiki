@@ -1,1 +1,2 @@
-UPDATE tasks SET completed = ? WHERE id = ?;
+UPDATE tasks SET completed = ?, completedAt = ? 
+  WHERE id = ?;
