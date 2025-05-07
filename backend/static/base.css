@@ -45,6 +45,26 @@ h1 {
   background-color: var(--contexts-bg-color);
 }
 
+.due-dates-expired {
+  --contexts-bg-color: hsl(0, 10%, 60%);
+  background-color: var(--contexts-bg-color);
+}
+
+.due-dates-today {
+  --contexts-bg-color: hsl(0, 100%, 80%);
+  background-color: var(--contexts-bg-color);
+}
+
+.due-dates-near-future {
+  --contexts-bg-color: hsl(60, 70%, 70%);
+  background-color: var(--contexts-bg-color);
+}
+
+.due-dates-future {
+  --contexts-bg-color: hsl(80, 90%, 70%);
+  background-color: var(--contexts-bg-color);
+}
+
 ul.tasks-list {
   list-style-type: none;
 }

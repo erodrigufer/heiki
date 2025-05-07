@@ -7,9 +7,9 @@ type Task struct {
 	Completed   bool
 	Priority    string
 	Description string
-	CreatedAt   time.Time
-	CompletedAt time.Time
-	DueAt       time.Time
+	CreatedAt   *time.Time
+	CompletedAt *time.Time
+	DueAt       *time.Time
 	// Projects are semantically identified by a `+`.
 	Projects []string
 	// Contexts are semantically identified by a `@`.

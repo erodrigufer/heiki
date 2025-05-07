@@ -2,6 +2,7 @@ package views
 
 import "github.com/erodrigufer/serenitynow/internal/tasks"
 import "fmt"
+import "time"
 
 templ taskList(tasks []tasks.Task) {
 	<ul class="tasks-list">
@@ -31,4 +32,56 @@ templ taskFormatter(task tasks.Task) {
 	for _, context := range task.Contexts {
 		<span class="labels contexts">{ "@" }{ context }</span>&nbsp;
 	}
+	if task.DueAt != nil {
+		<span class={ "labels", dueDatesClasses(task.DueAt, task.Completed) }>
+			{ formatDueDates(task.DueAt, task.Completed) }
+		</span>
+	}
+}
+
+func formatDueDates(dueDate *time.Time, completed bool) string {
+	// If dueDate == nil -> ""
+	// If dueDate is in past and not completed -> "expired"
+	// If dueDate is in past and completed -> ""
+	// If dueDate is today -> "today"
+	// If dueDate in the future:
+	now := time.Now()
+	if dueDate == nil {
+		return ""
+	}
+	if now.Day() == dueDate.Day() && now.Month() == dueDate.Month() &&
+		now.Year() == dueDate.Year() {
+		return "今日"
+	}
+	if dueDate.Before(now) {
+		return "死"
+	}
+	hours := time.Until(*dueDate).Round(24 * time.Hour).Hours()
+	days := int(hours / 24)
+	return fmt.Sprintf("%d日", days)
+}
+
+func dueDatesClasses(dueDate *time.Time, completed bool) string {
+	// If dueDate == nil -> ""
+	// If dueDate is in past and not completed -> "expired"
+	// If dueDate is in past and completed -> ""
+	// If dueDate is today -> "today"
+	// If dueDate in the future:
+	now := time.Now()
+	if dueDate == nil {
+		return ""
+	}
+	if now.Day() == dueDate.Day() && now.Month() == dueDate.Month() &&
+		now.Year() == dueDate.Year() {
+		return "due-dates-today"
+	}
+	if dueDate.Before(now) {
+		return "due-dates-expired"
+	}
+	hours := time.Until(*dueDate).Round(24 * time.Hour).Hours()
+	days := int(hours / 24)
+	if days > 7 {
+		return "due-dates-future"
+	}
+	return "due-dates-near-future"
 }

@@ -75,15 +75,15 @@ func (sm *StateManager) UpdateCompletedTask(ctx context.Context, completed bool,
 	return nil
 }
 
-func parseSqliteDate(date *string) (time.Time, error) {
+func parseSqliteDate(date *string) (*time.Time, error) {
 	if date == nil {
-		return time.Time{}, nil
+		return nil, nil
 	}
 	parsedDate, err := time.Parse("2006-01-02", *date)
 	if err != nil {
-		return time.Time{}, fmt.Errorf("unable to parse date: %w", err)
+		return nil, fmt.Errorf("unable to parse date: %w", err)
 	}
-	return parsedDate, nil
+	return &parsedDate, nil
 }
 
 func parseDatesIntoTask(task tasks.Task, createdAt, completedAt, dueAt *string) (tasks.Task, error) {
