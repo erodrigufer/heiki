@@ -1,0 +1,39 @@
+#!/bin/sh 
+
+# PROVIDE: serenitynow
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+#
+# Add the following lines to /etc/rc.conf to enable serenitynow:
+#
+# serenitynow_enable="YES"
+#
+#
+
+. /etc/rc.subr 
+
+name="serenitynow" 
+rcvar=serenitynow_enable
+
+pidfile="/var/run/${name}.pid"
+
+required_files="/usr/local/share/${name}.sqlite3" 
+
+sig_stop="INT"
+
+start_cmd="${name}_start"
+
+stop_cmd="${name}_stop"
+
+serenitynow_start() {
+	. /root/.envrc
+	cd /usr/local/bin/serenitynow.d && daemon -Sf -p /var/run/serenitynow.pid -o /var/log/serenitynow \
+	/usr/local/bin/serenitynow.d/serenitynow
+}
+
+serenitynow_stop() {
+	kill -s INT $(pgrep serenitynow)
+}
+
+load_rc_config $name
+run_rc_command "$1"
