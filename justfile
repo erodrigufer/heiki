@@ -24,6 +24,11 @@ templ:
 clean:
   cd backend && rm -rf ./tmp
 
+# build for deployment.
+[group('deployment')]
+build:
+  cd backend && env GOOS=freebsd GOARCH=amd64 go build -o ../build/serenitynow ./cmd/serenitynow
+
 # open sqlite cli.
 [group('sql')]
 sql:

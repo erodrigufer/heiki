@@ -20,3 +20,6 @@ go.work.sum
 
 # dbmate schema file.
 db/schema.sql
+
+# Deployment builds.
+/build
