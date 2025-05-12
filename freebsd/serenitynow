@@ -27,8 +27,8 @@ stop_cmd="${name}_stop"
 
 serenitynow_start() {
 	. /root/.envrc
-	cd /usr/local/bin/serenitynow.d && daemon -Sf -p /var/run/serenitynow.pid -o /var/log/serenitynow \
-	/usr/local/bin/serenitynow.d/serenitynow
+	cd /usr/local/bin && daemon -Sf -p /var/run/serenitynow.pid -o /var/log/serenitynow \
+	/usr/local/bin/serenitynow
 }
 
 serenitynow_stop() {
