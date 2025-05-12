@@ -35,7 +35,7 @@ func base() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html><meta name=\"description\" content=\"easycop\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta name=\"theme-color\" content=\"#470DAC\"><link rel=\"stylesheet\" href=\"/static/base.css\"><title>serenitynow</title><script src=\"https://unpkg.com/htmx.org@2.0.4\" integrity=\"sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+\" crossorigin=\"anonymous\"></script><script src=\"https://unpkg.com/htmx-ext-response-targets@2.0.2\" crossorigin=\"anonymous\"></script></head><body hx-ext=\"response-targets\"><h1>serenity now 安心</h1><h2>Friendly task manager ー 自分用やさしい仕事のノート </h2><p>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html><meta name=\"description\" content=\"easycop\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><meta name=\"theme-color\" content=\"#470DAC\"><link rel=\"stylesheet\" href=\"/content/base.css\"><title>serenitynow</title><script src=\"https://unpkg.com/htmx.org@2.0.4\" integrity=\"sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+\" crossorigin=\"anonymous\"></script><script src=\"https://unpkg.com/htmx-ext-response-targets@2.0.2\" crossorigin=\"anonymous\"></script></head><body hx-ext=\"response-targets\"><h1>serenity now 安心</h1><h2>Friendly task manager ー 自分用やさしい仕事のノート </h2><p>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

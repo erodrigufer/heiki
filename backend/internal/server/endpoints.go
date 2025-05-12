@@ -7,6 +7,7 @@ import (
 
 	"github.com/erodrigufer/serenitynow/internal/server/handlers"
 	"github.com/erodrigufer/serenitynow/internal/server/middlewares"
+	"github.com/erodrigufer/serenitynow/internal/static"
 )
 
 func (app *Application) defineEndpoints() (http.Handler, error) {
@@ -21,7 +22,7 @@ func (app *Application) defineEndpoints() (http.Handler, error) {
 
 	h := handlers.NewHandlers(app.InfoLog, app.ErrorLog, app.db, app.sessionManager)
 
-	fileServer := http.StripPrefix("/static", http.FileServer(http.Dir("./static")))
+	fileServer := http.FileServer(http.FS(static.STATIC_CONTENT))
 
 	middlewareChain := func(next http.Handler) http.Handler {
 		return m.RecoverPanic(m.SecureHeaders(m.LogRequest(app.sessionManager.LoadAndSave(next))))
@@ -40,7 +41,7 @@ func (app *Application) defineEndpoints() (http.Handler, error) {
 	mux.Handle("GET /login", m.AuthenticateLogin(h.GetLogin()))
 	mux.Handle("POST /login", h.PostLogin(authorizedUsername, authorizedPassword))
 	mux.Handle("POST /logout", h.PostLogout())
-	mux.Handle("GET /static/", fileServer)
+	mux.Handle("GET /content/", fileServer)
 	mux.Handle("GET /api/v1/health", h.GetHealth())
 
 	protectedMux := http.NewServeMux()
