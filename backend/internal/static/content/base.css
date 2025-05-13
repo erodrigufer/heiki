@@ -38,6 +38,7 @@ h1 {
   padding-bottom: var(--paddig-left-bottom-labels);
   color: var(--color-labels);
   border-radius: 0.2rem;
+  text-wrap: nowrap;
 }
 
 .projects {
