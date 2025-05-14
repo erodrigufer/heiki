@@ -115,7 +115,7 @@ func taskSubmit() templ.Component {
 			templ_7745c5c3_Var4 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<form action=\"/tasks\" method=\"POST\"><div><div><label for=\"task-priority-select\">Choose a task priority:</label></div><select id=\"task-priority-select\" name=\"priority\"><option value=\"\">Please choose a priority</option> <option value=\"A\">A</option> <option value=\"B\">B</option> <option value=\"C\">C</option> <option value=\"D\">D</option> <option value=\"\">No priority</option></select></div><div><input type=\"text\" placeholder=\"Task description...\" name=\"description\" required></div><div><input type=\"date\" name=\"due-date\"></div><div><button>Submit task</button></div></form>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<form action=\"/tasks\" method=\"POST\"><div><div><label for=\"task-priority-select\">Choose a task priority:</label></div><select id=\"task-priority-select\" name=\"priority\" required><option value=\"Z\">No priority</option> <option value=\"A\">A</option> <option value=\"B\">B</option> <option value=\"C\">C</option> <option value=\"D\">D</option></select></div><div><input type=\"text\" placeholder=\"Task description...\" name=\"description\" required></div><div><input type=\"date\" name=\"due-date\"></div><div><button>Submit task</button></div></form>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
