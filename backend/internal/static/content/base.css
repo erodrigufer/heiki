@@ -67,7 +67,7 @@ h1 {
 }
 
 .due-dates-future {
-  --contexts-bg-color: hsl(80, 90%, 70%);
+  --contexts-bg-color: hsl(90, 90%, 70%);
   background-color: var(--contexts-bg-color);
 }
 
