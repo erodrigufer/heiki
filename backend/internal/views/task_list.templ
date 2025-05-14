@@ -25,17 +25,17 @@ templ taskFormatter(task tasks.Task) {
 	if task.Priority != "" {
 		({ task.Priority })
 	}
+	if task.DueAt != nil {
+		<span class={ "labels" , dueDatesClasses(task.DueAt, task.Completed) }>
+			{ formatDueDates(task.DueAt, task.Completed) }
+		</span>
+	}
 	{ task.Description }
 	for _, project := range task.Projects {
 		<span class="labels projects">{ "+" }{ project }</span>&nbsp;
 	}
 	for _, context := range task.Contexts {
 		<span class="labels contexts">{ "@" }{ context }</span>&nbsp;
-	}
-	if task.DueAt != nil {
-		<span class={ "labels", dueDatesClasses(task.DueAt, task.Completed) }>
-			{ formatDueDates(task.DueAt, task.Completed) }
-		</span>
 	}
 }
 
