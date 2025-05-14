@@ -249,8 +249,6 @@ func taskFormatter(task tasks.Task) templ.Component {
 	})
 }
 
-// TODO: for dates too far in the future use '月' kanji, and calculate
-// in months.
 func formatDueDates(dueDate *time.Time, completed bool) string {
 	now := time.Now()
 	if dueDate == nil {
@@ -270,6 +268,10 @@ func formatDueDates(dueDate *time.Time, completed bool) string {
 		hours = 24
 	}
 	days := int(hours / 24)
+	if days > 30 {
+		months := days / 30
+		return fmt.Sprintf("%d月", months)
+	}
 	return fmt.Sprintf("%d日", days)
 }
 
@@ -287,6 +289,9 @@ func dueDatesClasses(dueDate *time.Time, completed bool) string {
 	}
 	hours := time.Until(*dueDate).Round(24 * time.Hour).Hours()
 	days := int(hours / 24)
+	if days > 30 {
+		return "due-dates-months"
+	}
 	if days > 7 {
 		return "due-dates-future"
 	}

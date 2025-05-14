@@ -71,6 +71,11 @@ h1 {
   background-color: var(--contexts-bg-color);
 }
 
+.due-dates-months {
+  --contexts-bg-color: hsl(150, 75%, 60%);
+  background-color: var(--contexts-bg-color);
+}
+
 ul.tasks-list {
   list-style-type: none;
 }
