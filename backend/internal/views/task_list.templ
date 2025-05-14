@@ -42,11 +42,6 @@ templ taskFormatter(task tasks.Task) {
 // TODO: for dates too far in the future use '月' kanji, and calculate
 // in months.
 func formatDueDates(dueDate *time.Time, completed bool) string {
-	// If dueDate == nil -> ""
-	// If dueDate is in past and not completed -> "expired"
-	// If dueDate is in past and completed -> ""
-	// If dueDate is today -> "today"
-	// If dueDate in the future:
 	now := time.Now()
 	if dueDate == nil {
 		return ""
@@ -69,11 +64,6 @@ func formatDueDates(dueDate *time.Time, completed bool) string {
 }
 
 func dueDatesClasses(dueDate *time.Time, completed bool) string {
-	// If dueDate == nil -> ""
-	// If dueDate is in past and not completed -> "expired"
-	// If dueDate is in past and completed -> ""
-	// If dueDate is today -> "today"
-	// If dueDate in the future:
 	now := time.Now()
 	if dueDate == nil {
 		return ""
