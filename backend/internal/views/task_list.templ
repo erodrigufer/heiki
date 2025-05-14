@@ -7,36 +7,33 @@ import "time"
 templ taskList(tasks []tasks.Task) {
 	<ul class="tasks-list">
 		for _, task := range tasks {
-			<li>
-				@taskFormatter(task)
-			</li>
+			@taskFormatter(task)
 		}
 	</ul>
 }
 
 templ taskFormatter(task tasks.Task) {
-	<input
-		type="checkbox"
-		name={ task.ID }
-		checked?={ task.Completed }
-		hx-target="main"
-		hx-put={ fmt.Sprintf("/tasks/%d?completed=%t", task.ID, !task.Completed) }
-	/>
-	if task.Priority != "" {
-		({ task.Priority })
-	}
-	if task.DueAt != nil {
-		<span class={ "labels" , dueDatesClasses(task.DueAt, task.Completed) }>
-			{ formatDueDates(task.DueAt, task.Completed) }
-		</span>
-	}
-	{ task.Description }
-	for _, project := range task.Projects {
-		<span class="labels projects">{ "+" }{ project }</span>&nbsp;
-	}
-	for _, context := range task.Contexts {
-		<span class="labels contexts">{ "@" }{ context }</span>&nbsp;
-	}
+	<li class={ fmt.Sprintf("tasks-list priority-%s", task.Priority) }>
+		<input
+			type="checkbox"
+			name={ task.ID }
+			checked?={ task.Completed }
+			hx-target="main"
+			hx-put={ fmt.Sprintf("/tasks/%d?completed=%t", task.ID, !task.Completed) }
+		/>
+		if task.DueAt != nil {
+			<span class={ "labels" , dueDatesClasses(task.DueAt, task.Completed) }>
+				{ formatDueDates(task.DueAt, task.Completed) }
+			</span>
+		}
+		{ task.Description }
+		for _, project := range task.Projects {
+			<span class="labels projects">{ "+" }{ project }</span>&nbsp;
+		}
+		for _, context := range task.Contexts {
+			<span class="labels contexts">{ "@" }{ context }</span>&nbsp;
+		}
+	</li>
 }
 
 func formatDueDates(dueDate *time.Time, completed bool) string {

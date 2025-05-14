@@ -81,3 +81,32 @@ h1 {
 ul.tasks-list {
   list-style-type: none;
 }
+
+li.tasks-list {
+  padding-top: 0.1rem;
+  padding-bottom: 0.125rem;
+}
+
+.priority-A {
+  --priority-bg-color: hsl(355, 80%, 70%);
+  background-color: var(--priority-bg-color);
+  color: black;
+}
+
+.priority-B {
+  --priority-bg-color: hsl(300, 80%, 75%);
+  background-color: var(--priority-bg-color);
+  color: black;
+}
+
+.priority-C {
+  --priority-bg-color: hsl(190, 100%, 70%);
+  background-color: var(--priority-bg-color);
+  color: black;
+}
+
+.priority-D {
+  --priority-bg-color: hsl(150, 100%, 70%);
+  background-color: var(--priority-bg-color);
+  color: black;
+}
