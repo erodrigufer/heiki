@@ -39,6 +39,8 @@ templ taskFormatter(task tasks.Task) {
 	}
 }
 
+// TODO: for dates too far in the future use '月' kanji, and calculate
+// in months.
 func formatDueDates(dueDate *time.Time, completed bool) string {
 	// If dueDate == nil -> ""
 	// If dueDate is in past and not completed -> "expired"
@@ -57,6 +59,11 @@ func formatDueDates(dueDate *time.Time, completed bool) string {
 		return "死"
 	}
 	hours := time.Until(*dueDate).Round(24 * time.Hour).Hours()
+	// TODO: Still needs to be fixed, because `Round` rounds from
+	// the halfway value up.
+	if hours == 0 {
+		hours = 24
+	}
 	days := int(hours / 24)
 	return fmt.Sprintf("%d日", days)
 }
