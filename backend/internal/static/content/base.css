@@ -30,15 +30,17 @@ h1 {
 }
 
 .labels {
-  --paddig-left-bottom-labels: 0.1rem;
-  --padding-right-labels: 0.4rem;
+  --paddig-bottom-labels: 0.1rem;
+  --padding-left-labels: 0.125rem;
+  --padding-right-labels: 0.2rem;
   --color-labels: hsl(220, 24%, 10%);
   padding-right: var(--padding-right-labels);
-  padding-left: var(--paddig-left-bottom-labels);
-  padding-bottom: var(--paddig-left-bottom-labels);
+  padding-left: var(--padding-left-labels);
+  padding-bottom: var(--paddig-bottom-labels);
   color: var(--color-labels);
   border-radius: 0.2rem;
   text-wrap: nowrap;
+  border: 0.07rem solid;
 }
 
 .projects {
