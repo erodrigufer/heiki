@@ -1,3 +1,6 @@
+# Backups
+*.bak
+
 # Ignore builds from air.
 **/tmp
 
