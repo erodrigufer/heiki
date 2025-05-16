@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"syscall"
 
 	"github.com/erodrigufer/serenitynow/internal/server"
 )
@@ -25,9 +26,9 @@ func main() {
 // run encapsulates the web application.
 // It can be used to create integration/unit tests using the `go test` framework.
 func run(ctx context.Context, requiredEnvVariables []string) error {
-	// Cancel context if application receives a SIGNINT signal, and use cancelled
+	// Cancel context if application receives a signal, and use cancelled
 	// context to start a graceful shutdown of the application.
-	ctx, cancel := signal.NotifyContext(ctx, os.Interrupt)
+	ctx, cancel := signal.NotifyContext(ctx, syscall.SIGINT, syscall.SIGTERM)
 	defer cancel()
 
 	app, err := server.NewApplication(ctx, requiredEnvVariables)

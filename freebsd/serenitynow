@@ -26,12 +26,14 @@ stop_cmd="${name}_stop"
 
 serenitynow_start() {
 	. /root/.${name}.env
-	daemon --close-fds --syslog --restart --child-pidfile ${pidfile} --output-file /var/log/${name} \
+	daemon --close-fds --restart --supervisor-pidfile ${pidfile} --output-file /var/log/${name} \
 	/usr/local/bin/${name}
+	echo "Starting serenitynow..."
 }
 
 serenitynow_stop() {
-	kill -s INT $(pgrep serenitynow)
+	kill -s TERM $(cat ${pidfile})
+	echo "serenitynow was stopped."
 }
 
 load_rc_config $name

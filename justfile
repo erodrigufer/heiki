@@ -30,6 +30,13 @@ build: templ
   rm -rf ./build
   cd backend && env GOOS=freebsd GOARCH=amd64 go build -o ../build/serenitynow ./cmd/serenitynow
 
+# deploy.
+[group('deployment')]
+deploy: build
+  ssh -i ${DEPLOY_KEY} ${DEPLOY_USER}@${DEPLOY_HOST} service serenitynow stop
+  scp -i ${DEPLOY_KEY} ./build/serenitynow ${DEPLOY_USER}@${DEPLOY_HOST}:/usr/local/bin/serenitynow
+  ssh -i ${DEPLOY_KEY} ${DEPLOY_USER}@${DEPLOY_HOST} service serenitynow start
+
 # open sqlite cli.
 [group('sql')]
 sql:

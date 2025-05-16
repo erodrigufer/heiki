@@ -78,7 +78,7 @@ func (app *Application) startDBConnection(ctx context.Context) error {
 }
 
 // StartServerWithGracefulShutdown starts a server and gracefully handles shutdowns.
-// If the server receives an os.Interrupt signal the backend knows that it should
+// If the server receives a signal the backend knows that it should
 // start the process of gracefully shutting down, i.e. closing DB connections and
 // closing client connections.
 func (app *Application) StartServerWithGracefulShutdown(ctx context.Context) {
