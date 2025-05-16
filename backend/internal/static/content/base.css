@@ -79,6 +79,7 @@ h1 {
 }
 
 ul.tasks-list {
+  padding-left: 0;
   list-style-type: none;
 }
 
