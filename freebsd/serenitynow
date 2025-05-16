@@ -11,7 +11,6 @@
 #
 
 . /etc/rc.subr 
-
 name="serenitynow" 
 rcvar=serenitynow_enable
 
@@ -26,9 +25,9 @@ start_cmd="${name}_start"
 stop_cmd="${name}_stop"
 
 serenitynow_start() {
-	. /root/.envrc
-	cd /usr/local/bin && daemon -Sf -p /var/run/serenitynow.pid -o /var/log/serenitynow \
-	/usr/local/bin/serenitynow
+	. /root/.${name}.env
+	daemon --close-fds --syslog --restart --child-pidfile ${pidfile} --output-file /var/log/${name} \
+	/usr/local/bin/${name}
 }
 
 serenitynow_stop() {
