@@ -51,6 +51,8 @@ func (app *Application) defineEndpoints() (http.Handler, error) {
 	protectedMux.Handle("GET /tasks", h.GetTasks())
 	protectedMux.Handle("POST /tasks", h.PostTasks())
 	protectedMux.Handle("PUT /tasks/{id}", h.PutCompletedTask())
+	protectedMux.Handle("GET /projects", h.GetProjects())
+	protectedMux.Handle("POST /projects", h.PostProjects())
 
 	return middlewareChain(mux), nil
 }

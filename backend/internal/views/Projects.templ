@@ -1,0 +1,43 @@
+package views
+
+import "github.com/erodrigufer/serenitynow/internal/types"
+
+templ ProjectsPageView(projects []types.Project) {
+	@base() {
+		@ProjectsPageContent(projects)
+	}
+}
+
+templ ProjectsPageContent(projects []types.Project) {
+	<button
+		class="auth-btn logout-btn"
+		hx-boost="false"
+		hx-post="/logout"
+		hx-push-url="true"
+		hx-swap="innerHTML"
+		hx-target="body"
+	>Logout</button>
+	@projectList(projects)
+	@projectSubmit()
+}
+
+templ projectSubmit() {
+	<form action="/projects" method="POST">
+		<div>
+			<input type="text" placeholder="Project name..." name="name" required/>
+		</div>
+		<div>
+			<button>
+				Submit project
+			</button>
+		</div>
+	</form>
+}
+
+templ projectList(projects []types.Project) {
+	<ul>
+		for _, project := range projects {
+			<li>{ project.Name } </li>
+		}
+	</ul>
+}

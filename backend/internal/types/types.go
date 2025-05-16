@@ -15,3 +15,9 @@ type Task struct {
 	// Contexts are semantically identified by a `@`.
 	Contexts []string
 }
+
+type Project struct {
+	ID        int
+	Name      string
+	CreatedAt *time.Time
+}
