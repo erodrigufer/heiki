@@ -27,6 +27,7 @@ clean:
 # build for deployment.
 [group('deployment')]
 build:
+  rm -rf ./build
   cd backend && env GOOS=freebsd GOARCH=amd64 go build -o ../build/serenitynow ./cmd/serenitynow
 
 # open sqlite cli.
