@@ -7,7 +7,7 @@ default:
 
 # go vet.
 [group('go')]
-vet:
+vet: templ
   cd backend && go vet ./...
 
 # Start the server with air.
@@ -26,7 +26,7 @@ clean:
 
 # build for deployment.
 [group('deployment')]
-build:
+build: templ
   rm -rf ./build
   cd backend && env GOOS=freebsd GOARCH=amd64 go build -o ../build/serenitynow ./cmd/serenitynow
 
