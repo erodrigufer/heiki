@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/erodrigufer/serenitynow/internal/tasks"
+	"github.com/erodrigufer/serenitynow/internal/types"
 )
 
 //go:embed insertTask.sql
@@ -33,12 +33,12 @@ func (sm *StateManager) InsertTask(ctx context.Context, priority, description, d
 	return nil
 }
 
-func (sm *StateManager) GetAllTasks(ctx context.Context) ([]tasks.Task, error) {
+func (sm *StateManager) GetAllTasks(ctx context.Context) ([]types.Task, error) {
 	rows, err := sm.QueryContext(ctx, getAllTasksQuery)
 	if err != nil {
 		return nil, fmt.Errorf("unable to get all tasks from db: %w", err)
 	}
-	allTasks := make([]tasks.Task, 0)
+	allTasks := make([]types.Task, 0)
 	defer rows.Close()
 
 	var createdAtStr *string
@@ -46,7 +46,7 @@ func (sm *StateManager) GetAllTasks(ctx context.Context) ([]tasks.Task, error) {
 	var dueAtStr *string
 
 	for rows.Next() {
-		t := &tasks.Task{}
+		t := &types.Task{}
 		err := rows.Scan(&t.ID, &t.Completed, &t.Priority, &t.Description, &createdAtStr,
 			&completedAtStr, &dueAtStr)
 		if err != nil {
@@ -86,19 +86,19 @@ func parseSqliteDate(date *string) (*time.Time, error) {
 	return &parsedDate, nil
 }
 
-func parseDatesIntoTask(task tasks.Task, createdAt, completedAt, dueAt *string) (tasks.Task, error) {
+func parseDatesIntoTask(task types.Task, createdAt, completedAt, dueAt *string) (types.Task, error) {
 	var err error
 	task.CreatedAt, err = parseSqliteDate(createdAt)
 	if err != nil {
-		return tasks.Task{}, err
+		return types.Task{}, err
 	}
 	task.CompletedAt, err = parseSqliteDate(completedAt)
 	if err != nil {
-		return tasks.Task{}, err
+		return types.Task{}, err
 	}
 	task.DueAt, err = parseSqliteDate(dueAt)
 	if err != nil {
-		return tasks.Task{}, err
+		return types.Task{}, err
 	}
 
 	return task, nil

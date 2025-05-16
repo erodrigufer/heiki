@@ -1,10 +1,10 @@
 package views
 
-import "github.com/erodrigufer/serenitynow/internal/tasks"
+import "github.com/erodrigufer/serenitynow/internal/types"
 import "fmt"
 import "time"
 
-templ taskList(tasks []tasks.Task) {
+templ taskList(tasks []types.Task) {
 	<ul class="tasks-list">
 		for _, task := range tasks {
 			@taskFormatter(task)
@@ -12,7 +12,7 @@ templ taskList(tasks []tasks.Task) {
 	</ul>
 }
 
-templ taskFormatter(task tasks.Task) {
+templ taskFormatter(task types.Task) {
 	<li class={ fmt.Sprintf("tasks-list priority-%s", task.Priority) }>
 		<input
 			type="checkbox"

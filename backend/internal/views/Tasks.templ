@@ -1,14 +1,14 @@
 package views
 
-import "github.com/erodrigufer/serenitynow/internal/tasks"
+import "github.com/erodrigufer/serenitynow/internal/types"
 
-templ TasksPageView(tasks []tasks.Task) {
+templ TasksPageView(tasks []types.Task) {
 	@base() {
 		@TasksPageContent(tasks)
 	}
 }
 
-templ TasksPageContent(tasks []tasks.Task) {
+templ TasksPageContent(tasks []types.Task) {
 	<button
 		class="auth-btn logout-btn"
 		hx-boost="false"
