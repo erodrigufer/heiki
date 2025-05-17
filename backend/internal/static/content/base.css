@@ -29,6 +29,14 @@ h1 {
   color: var(--h1-color);
 }
 
+a {
+  text-decoration: none;
+}
+
+a:link {
+  text-decoration: none;
+}
+
 .labels {
   --paddig-bottom-labels: 0.1rem;
   --padding-left-labels: 0.125rem;
@@ -43,9 +51,23 @@ h1 {
   border: 0.07rem solid;
 }
 
+.labels-anchor {
+  color: black;
+}
+
 .projects {
-  --projects-bg-color: white;
+  --projects-bg-color: hsl(220, 1%, 90%);
   background-color: var(--projects-bg-color);
+  border-color: var(--projects-bg-color);
+  transition:
+    background-color 0.5s 0s ease-in-out,
+    border-color 0.5s 0s ease-in-out;
+}
+
+span.projects:hover {
+  --projects-hover-bg-color: hsl(220, 5%, 100%);
+  background-color: var(--projects-hover-bg-color);
+  border-color: var(--projects-hover-bg-color);
 }
 
 .contexts {

@@ -2,6 +2,7 @@ package state
 
 import (
 	"context"
+	"database/sql"
 	_ "embed"
 	"fmt"
 	"strconv"
@@ -22,6 +23,9 @@ var updateCompletedTaskQuery string
 
 //go:embed insertIntoProjectsByTask.sql
 var insertIntoProjectsByTask string
+
+//go:embed getAllTasksByProjectID.sql
+var getAllTasksByProjectID string
 
 func (sm *StateManager) InsertTask(ctx context.Context, priority, description, dueDate string, projectID int) error {
 	var dueDatePtr *string
@@ -66,6 +70,28 @@ func (sm *StateManager) GetAllTasks(ctx context.Context) ([]types.Task, error) {
 	if err != nil {
 		return nil, fmt.Errorf("unable to get all tasks from db: %w", err)
 	}
+	allTasks, err := parseRowsToTasks(rows)
+	if err != nil {
+		return nil, fmt.Errorf("unable to parse tasks from rows: %w", err)
+	}
+
+	return allTasks, nil
+}
+
+func (sm *StateManager) GetAllTasksByProjectID(ctx context.Context, projectID int) ([]types.Task, error) {
+	rows, err := sm.QueryContext(ctx, getAllTasksByProjectID, projectID)
+	if err != nil {
+		return nil, fmt.Errorf("unable to get all tasks from db: %w", err)
+	}
+	allTasks, err := parseRowsToTasks(rows)
+	if err != nil {
+		return nil, fmt.Errorf("unable to parse tasks from rows: %w", err)
+	}
+
+	return allTasks, nil
+}
+
+func parseRowsToTasks(rows *sql.Rows) ([]types.Task, error) {
 	allTasks := make([]types.Task, 0)
 	defer rows.Close()
 

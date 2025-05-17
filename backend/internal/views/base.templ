@@ -20,7 +20,9 @@ templ base(showLogout bool) {
 			<script src="https://unpkg.com/htmx-ext-response-targets@2.0.2" crossorigin="anonymous"></script>
 		</head>
 		<body hx-ext="response-targets">
-			<h1>serenity now 安心</h1>
+			<a href="/">
+				<h1>serenity now 安心</h1>
+			</a>
 			<h2>Friendly task manager ー 自分用やさしい仕事のノート </h2>
 			<p>{ monday.Format(time.Now(), monday.DefaultFormatJaJPLong , monday.LocaleJaJP) }</p>
 			@navbar(showLogout)
