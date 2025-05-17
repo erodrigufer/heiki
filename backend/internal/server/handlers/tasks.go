@@ -17,7 +17,13 @@ func (h *Handlers) GetTasks() http.HandlerFunc {
 			web.HandleServerError(w, r, err, h.errorLog)
 			return
 		}
-		err = web.RenderComponent(r.Context(), w, views.TasksPageView(tasks))
+		projects, err := h.sm.GetAllProjects(r.Context())
+		if err != nil {
+			web.HandleServerError(w, r, err, h.errorLog)
+			return
+		}
+
+		err = web.RenderComponent(r.Context(), w, views.TasksPageView(tasks, projects))
 		if err != nil {
 			web.HandleServerError(w, r, err, h.errorLog)
 			return
@@ -36,8 +42,15 @@ func (h *Handlers) PostTasks() http.HandlerFunc {
 		description := r.PostForm.Get("description")
 		priority := r.PostForm.Get("priority")
 		dueDateStr := r.PostForm.Get("due-date")
+		projectIDStr := r.PostForm.Get("project-id")
 
-		err = h.sm.InsertTask(r.Context(), priority, description, dueDateStr)
+		projectID, err := strconv.Atoi(projectIDStr)
+		if err != nil {
+			web.HandleBadRequest(w, "project-id cannot be parsed to an int")
+			return
+		}
+
+		err = h.sm.InsertTask(r.Context(), priority, description, dueDateStr, projectID)
 		if err != nil {
 			web.HandleServerError(w, r, err, h.errorLog)
 			return
@@ -79,7 +92,13 @@ func (h *Handlers) PutCompletedTask() http.HandlerFunc {
 			web.HandleServerError(w, r, err, h.errorLog)
 			return
 		}
-		err = web.RenderComponent(r.Context(), w, views.TasksPageContent(tasks))
+		projects, err := h.sm.GetAllProjects(r.Context())
+		if err != nil {
+			web.HandleServerError(w, r, err, h.errorLog)
+			return
+		}
+
+		err = web.RenderComponent(r.Context(), w, views.TasksPageContent(tasks, projects))
 		if err != nil {
 			web.HandleServerError(w, r, err, h.errorLog)
 			return

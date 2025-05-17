@@ -2,13 +2,13 @@ package views
 
 import "github.com/erodrigufer/serenitynow/internal/types"
 
-templ TasksPageView(tasks []types.Task) {
+templ TasksPageView(tasks []types.Task, projects []types.Project) {
 	@base() {
-		@TasksPageContent(tasks)
+		@TasksPageContent(tasks, projects)
 	}
 }
 
-templ TasksPageContent(tasks []types.Task) {
+templ TasksPageContent(tasks []types.Task, projects []types.Project) {
 	<button
 		class="auth-btn logout-btn"
 		hx-boost="false"
@@ -18,10 +18,10 @@ templ TasksPageContent(tasks []types.Task) {
 		hx-target="body"
 	>Logout</button>
 	@taskList(tasks)
-	@taskSubmit()
+	@taskSubmit(projects)
 }
 
-templ taskSubmit() {
+templ taskSubmit(projects []types.Project) {
 	<form action="/tasks" method="POST">
 		<div>
 			<div>
@@ -42,9 +42,24 @@ templ taskSubmit() {
 			<input type="date" name="due-date"/>
 		</div>
 		<div>
+			@projectsSelect(projects)
+		</div>
+		<div>
 			<button>
 				Submit task
 			</button>
 		</div>
 	</form>
+}
+
+templ projectsSelect(projects []types.Project) {
+	<div>
+		<label for="project-select">Choose a project:</label>
+	</div>
+	<select id="project-select" name="project-id" required>
+		<option value="0">No project</option>
+		for _, project := range projects {
+			<option value={ project.ID }>{ project.Name }</option>
+		}
+	</select>
 }

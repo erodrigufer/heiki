@@ -20,7 +20,10 @@ var getAllTasksQuery string
 //go:embed updateCompletedTask.sql
 var updateCompletedTaskQuery string
 
-func (sm *StateManager) InsertTask(ctx context.Context, priority, description, dueDate string) error {
+//go:embed insertIntoProjectsByTask.sql
+var insertIntoProjectsByTask string
+
+func (sm *StateManager) InsertTask(ctx context.Context, priority, description, dueDate string, projectID int) error {
 	var dueDatePtr *string
 	// If dueDate is an empty string, store a NULL value.
 	if dueDate == "" {
@@ -28,9 +31,32 @@ func (sm *StateManager) InsertTask(ctx context.Context, priority, description, d
 	} else {
 		dueDatePtr = &dueDate
 	}
-	_, err := sm.ExecContext(ctx, insertTaskQuery, priority, description, dueDatePtr, nil)
+
+	tx, err := sm.BeginTx(ctx, nil)
+	if err != nil {
+		return fmt.Errorf("unable to start transaction to insert task: %w", err)
+	}
+	defer tx.Rollback()
+
+	results, err := tx.ExecContext(ctx, insertTaskQuery, priority, description, dueDatePtr, nil)
 	if err != nil {
 		return fmt.Errorf("unable to insert task in db: %w", err)
+	}
+
+	taskID, err := results.LastInsertId()
+	if err != nil {
+		return fmt.Errorf("unable to retrieve ID of inserted task: %w", err)
+	}
+
+	if projectID != 0 {
+		_, err = tx.ExecContext(ctx, insertIntoProjectsByTask, int(taskID), projectID)
+		if err != nil {
+			return fmt.Errorf("unable to insert task in db: %w", err)
+		}
+	}
+
+	if err = tx.Commit(); err != nil {
+		return fmt.Errorf("unable to commit transaction: %w", err)
 	}
 	return nil
 }

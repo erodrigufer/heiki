@@ -44,7 +44,7 @@ h1 {
 }
 
 .projects {
-  --projects-bg-color: hsl(60, 100%, 70%);
+  --projects-bg-color: white;
   background-color: var(--projects-bg-color);
 }
 
