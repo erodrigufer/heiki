@@ -1,6 +1,6 @@
 # serenity now
 
-平気
+安心
 
 ## Requirements
 
