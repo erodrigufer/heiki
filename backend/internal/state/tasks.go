@@ -4,6 +4,8 @@ import (
 	"context"
 	_ "embed"
 	"fmt"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/erodrigufer/serenitynow/internal/types"
@@ -44,18 +46,25 @@ func (sm *StateManager) GetAllTasks(ctx context.Context) ([]types.Task, error) {
 	var createdAtStr *string
 	var completedAtStr *string
 	var dueAtStr *string
+	var projectNamesStr *string
+	var projectIDsStr *string
 
 	for rows.Next() {
 		t := &types.Task{}
 		err := rows.Scan(&t.ID, &t.Completed, &t.Priority, &t.Description, &createdAtStr,
-			&completedAtStr, &dueAtStr)
+			&completedAtStr, &dueAtStr, &projectNamesStr, &projectIDsStr)
 		if err != nil {
 			return nil, fmt.Errorf("row.Scan() failed: %w", err)
 		}
 		tParsed, err := parseDatesIntoTask(*t, createdAtStr, completedAtStr, dueAtStr)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("unable to parse dates into task: %w", err)
 		}
+		projects, err := parseProjects(projectNamesStr, projectIDsStr)
+		if err != nil {
+			return nil, fmt.Errorf("unable to parse projects: %w", err)
+		}
+		tParsed.Projects = projects
 		allTasks = append(allTasks, tParsed)
 	}
 	return allTasks, nil
@@ -102,4 +111,34 @@ func parseDatesIntoTask(task types.Task, createdAt, completedAt, dueAt *string) 
 	}
 
 	return task, nil
+}
+
+func parseProjects(concatenatedNames, concatenatedIDs *string) ([]types.Project, error) {
+	if concatenatedNames == nil {
+		return []types.Project{}, nil
+	}
+	names := strings.Split(*concatenatedNames, ",")
+	if len(names) == 0 {
+		return []types.Project{}, nil
+	}
+	if concatenatedIDs == nil {
+		return []types.Project{}, nil
+	}
+	ids := strings.Split(*concatenatedIDs, ",")
+	if len(ids) == 0 {
+		return []types.Project{}, nil
+	}
+	projects := make([]types.Project, 0)
+	for i, name := range names {
+		idInt, err := strconv.Atoi(ids[i])
+		if err != nil {
+			return []types.Project{}, fmt.Errorf("unable to convert id of project into int: %w", err)
+		}
+		project := types.Project{
+			ID:   idInt,
+			Name: name,
+		}
+		projects = append(projects, project)
+	}
+	return projects, nil
 }

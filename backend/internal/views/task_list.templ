@@ -28,10 +28,10 @@ templ taskFormatter(task types.Task) {
 		}
 		{ task.Description }
 		for _, project := range task.Projects {
-			<span class="labels projects">{ "+" }{ project }</span>&nbsp;
+			<span class="labels projects">{ "+" }{ project.Name }</span>&nbsp;
 		}
 		for _, context := range task.Contexts {
-			<span class="labels contexts">{ "@" }{ context }</span>&nbsp;
+			<span class="labels contexts">{ "@" }{ context.Name }</span>&nbsp;
 		}
 	</li>
 }

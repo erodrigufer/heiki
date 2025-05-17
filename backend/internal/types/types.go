@@ -11,12 +11,18 @@ type Task struct {
 	CompletedAt *time.Time
 	DueAt       *time.Time
 	// Projects are semantically identified by a `+`.
-	Projects []string
+	Projects []Project
 	// Contexts are semantically identified by a `@`.
-	Contexts []string
+	Contexts []Context
 }
 
 type Project struct {
+	ID        int
+	Name      string
+	CreatedAt *time.Time
+}
+
+type Context struct {
 	ID        int
 	Name      string
 	CreatedAt *time.Time
