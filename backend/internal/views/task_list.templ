@@ -46,7 +46,7 @@ func formatDueDates(dueDate *time.Time, completed bool) string {
 		return "今日"
 	}
 	if dueDate.Before(now) {
-		return "死"
+		return "古"
 	}
 	hours := time.Until(*dueDate).Round(24 * time.Hour).Hours()
 	// TODO: Still needs to be fixed, because `Round` rounds from

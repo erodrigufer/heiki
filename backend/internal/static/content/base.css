@@ -54,8 +54,10 @@ h1 {
 }
 
 .due-dates-expired {
-  --contexts-bg-color: hsl(0, 0%, 80%);
+  --contexts-bg-color: hsl(335, 100%, 55%);
   background-color: var(--contexts-bg-color);
+  color: white;
+  border-color: black;
 }
 
 .due-dates-today {
