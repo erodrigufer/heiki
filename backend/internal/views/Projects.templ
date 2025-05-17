@@ -3,20 +3,12 @@ package views
 import "github.com/erodrigufer/serenitynow/internal/types"
 
 templ ProjectsPageView(projects []types.Project) {
-	@base() {
+	@base(true) {
 		@ProjectsPageContent(projects)
 	}
 }
 
 templ ProjectsPageContent(projects []types.Project) {
-	<button
-		class="auth-btn logout-btn"
-		hx-boost="false"
-		hx-post="/logout"
-		hx-push-url="true"
-		hx-swap="innerHTML"
-		hx-target="body"
-	>Logout</button>
 	@projectList(projects)
 	@projectSubmit()
 }

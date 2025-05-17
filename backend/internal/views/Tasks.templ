@@ -3,20 +3,12 @@ package views
 import "github.com/erodrigufer/serenitynow/internal/types"
 
 templ TasksPageView(tasks []types.Task, projects []types.Project) {
-	@base() {
+	@base(true) {
 		@TasksPageContent(tasks, projects)
 	}
 }
 
 templ TasksPageContent(tasks []types.Task, projects []types.Project) {
-	<button
-		class="auth-btn logout-btn"
-		hx-boost="false"
-		hx-post="/logout"
-		hx-push-url="true"
-		hx-swap="innerHTML"
-		hx-target="body"
-	>Logout</button>
 	@taskList(tasks)
 	@taskSubmit(projects)
 }
