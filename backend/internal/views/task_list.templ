@@ -20,6 +20,7 @@ templ taskFormatter(task types.Task) {
 			checked?={ task.Completed }
 			hx-target="main"
 			hx-put={ fmt.Sprintf("/tasks/%d?completed=%t", task.ID, !task.Completed) }
+			hx-push-url="/tasks?completed"
 		/>
 		if task.DueAt != nil {
 			<span class={ "labels" , dueDatesClasses(task.DueAt, task.Completed) }>
