@@ -20,7 +20,7 @@ env_file="/root/.${name}.env"
 
 required_files="/usr/local/share/${name}.d/${name}.sqlite3 /usr/local/bin/${name} ${env_file}" 
 
-sig_stop="INT"
+sig_stop="TERM"
 
 start_cmd="${name}_start"
 
