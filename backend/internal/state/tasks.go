@@ -18,6 +18,9 @@ var insertTaskQuery string
 //go:embed getAllTasks.sql
 var getAllTasksQuery string
 
+//go:embed getAllOpenTasks.sql
+var getAllOpenTasksQuery string
+
 //go:embed updateCompletedTask.sql
 var updateCompletedTaskQuery string
 
@@ -65,10 +68,20 @@ func (sm *StateManager) InsertTask(ctx context.Context, priority, description, d
 	return nil
 }
 
-func (sm *StateManager) GetAllTasks(ctx context.Context) ([]types.Task, error) {
-	rows, err := sm.QueryContext(ctx, getAllTasksQuery)
-	if err != nil {
-		return nil, fmt.Errorf("unable to get all tasks from db: %w", err)
+func (sm *StateManager) GetAllTasks(ctx context.Context, showCompletedTasks bool) ([]types.Task, error) {
+	var rows *sql.Rows
+	var err error
+	if showCompletedTasks {
+		rows, err = sm.QueryContext(ctx, getAllTasksQuery)
+		if err != nil {
+			return nil, fmt.Errorf("unable to get all tasks from db: %w", err)
+		}
+	} else {
+		rows, err = sm.QueryContext(ctx, getAllOpenTasksQuery)
+		if err != nil {
+			return nil, fmt.Errorf("unable to get all tasks from db: %w", err)
+		}
+
 	}
 	allTasks, err := parseRowsToTasks(rows)
 	if err != nil {

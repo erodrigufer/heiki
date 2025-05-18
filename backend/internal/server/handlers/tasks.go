@@ -12,7 +12,9 @@ import (
 
 func (h *Handlers) GetTasks() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		tasks, err := h.sm.GetAllTasks(r.Context())
+		queryValues := r.URL.Query()
+		showCompletedTasks := queryValues.Has("completed")
+		tasks, err := h.sm.GetAllTasks(r.Context(), showCompletedTasks)
 		if err != nil {
 			web.HandleServerError(w, r, err, h.errorLog)
 			return
@@ -87,7 +89,7 @@ func (h *Handlers) PutCompletedTask() http.HandlerFunc {
 			return
 		}
 
-		tasks, err := h.sm.GetAllTasks(r.Context())
+		tasks, err := h.sm.GetAllTasks(r.Context(), true)
 		if err != nil {
 			web.HandleServerError(w, r, err, h.errorLog)
 			return
