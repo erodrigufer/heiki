@@ -16,7 +16,7 @@ rcvar=serenitynow_enable
 
 pidfile="/var/run/${name}.pid"
 
-required_files="/usr/local/share/${name}.sqlite3" 
+required_files="/usr/local/share/${name}.d/${name}.sqlite3" 
 
 sig_stop="INT"
 
@@ -26,7 +26,7 @@ stop_cmd="${name}_stop"
 
 serenitynow_start() {
 	. /root/.${name}.env
-	daemon --close-fds --restart --supervisor-pidfile ${pidfile} --output-file /var/log/${name} \
+	daemon --close-fds --restart --user ${name} --supervisor-pidfile ${pidfile} --output-file /var/log/${name} \
 	/usr/local/bin/${name}
 	echo "Starting serenitynow..."
 }
