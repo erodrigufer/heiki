@@ -12,11 +12,13 @@
 
 . /etc/rc.subr 
 name="serenitynow" 
-rcvar=serenitynow_enable
+rcvar=${name}_enable
 
 pidfile="/var/run/${name}.pid"
 
-required_files="/usr/local/share/${name}.d/${name}.sqlite3" 
+env_file="/root/.${name}.env"
+
+required_files="/usr/local/share/${name}.d/${name}.sqlite3 /usr/local/bin/${name} ${env_file}" 
 
 sig_stop="INT"
 
@@ -25,15 +27,15 @@ start_cmd="${name}_start"
 stop_cmd="${name}_stop"
 
 serenitynow_start() {
-	. /root/.${name}.env
+	. ${env_file}
 	daemon --close-fds --restart --user ${name} --supervisor-pidfile ${pidfile} --output-file /var/log/${name} \
 	/usr/local/bin/${name}
-	echo "Starting serenitynow..."
+	echo "Starting ${name}..."
 }
 
 serenitynow_stop() {
 	kill -s TERM $(cat ${pidfile})
-	echo "serenitynow was stopped."
+	echo "${name} was stopped."
 }
 
 load_rc_config $name
