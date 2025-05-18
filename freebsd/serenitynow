@@ -15,10 +15,9 @@ name="serenitynow"
 rcvar=${name}_enable
 
 pidfile="/var/run/${name}.pid"
+serenitynow_env_file="/root/.${name}.env"
 
-env_file="/root/.${name}.env"
-
-required_files="/usr/local/share/${name}.d/${name}.sqlite3 /usr/local/bin/${name} ${env_file}" 
+required_files="/usr/local/share/${name}.d/${name}.sqlite3 /usr/local/bin/${name} ${serenitynow_env_file}" 
 
 sig_stop="TERM"
 
@@ -27,7 +26,6 @@ start_cmd="${name}_start"
 stop_cmd="${name}_stop"
 
 serenitynow_start() {
-	. ${env_file}
 	daemon --close-fds --restart --user ${name} --supervisor-pidfile ${pidfile} --output-file /var/log/${name} \
 	/usr/local/bin/${name}
 	echo "Starting ${name}..."
