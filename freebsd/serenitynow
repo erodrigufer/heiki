@@ -16,25 +16,14 @@ rcvar=${name}_enable
 
 pidfile="/var/run/${name}.pid"
 serenitynow_env_file="/root/.${name}.env"
+serenitynow_command="/usr/local/bin/${name}"
 
 required_files="/usr/local/share/${name}.d/${name}.sqlite3 /usr/local/bin/${name} ${serenitynow_env_file}" 
 
 sig_stop="TERM"
 
-start_cmd="${name}_start"
-
-stop_cmd="${name}_stop"
-
-serenitynow_start() {
-	daemon --close-fds --restart --user ${name} --supervisor-pidfile ${pidfile} --output-file /var/log/${name} \
-	/usr/local/bin/${name}
-	echo "Starting ${name}..."
-}
-
-serenitynow_stop() {
-	kill -s TERM $(cat ${pidfile})
-	echo "${name} was stopped."
-}
+command="/usr/sbin/daemon"
+command_args="--close-fds --restart --user ${name} --supervisor-pidfile ${pidfile} --output-file /var/log/${name} ${serenitynow_command}"
 
 load_rc_config $name
 run_rc_command "$1"
