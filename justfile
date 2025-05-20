@@ -33,9 +33,9 @@ build: templ
 # deploy.
 [group('deployment')]
 deploy: build
-  ssh -i ${DEPLOY_KEY} ${DEPLOY_USER}@${DEPLOY_HOST} service serenitynow stop
-  scp -i ${DEPLOY_KEY} ./build/serenitynow ${DEPLOY_USER}@${DEPLOY_HOST}:/usr/local/bin/serenitynow
-  ssh -i ${DEPLOY_KEY} ${DEPLOY_USER}@${DEPLOY_HOST} service serenitynow start
+  @ssh -i ${DEPLOY_KEY} ${DEPLOY_USER}@${DEPLOY_HOST} service serenitynow stop
+  @scp -i ${DEPLOY_KEY} ./build/serenitynow ${DEPLOY_USER}@${DEPLOY_HOST}:/usr/local/bin/serenitynow
+  @ssh -i ${DEPLOY_KEY} ${DEPLOY_USER}@${DEPLOY_HOST} service serenitynow start
 
 # open sqlite cli.
 [group('sql')]
