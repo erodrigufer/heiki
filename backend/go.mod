@@ -7,6 +7,7 @@ require (
 	github.com/alexedwards/scs/v2 v2.8.0
 	github.com/goodsign/monday v1.0.2
 	github.com/google/uuid v1.6.0
+	github.com/lmittmann/tint v1.1.0
 	github.com/spf13/viper v1.20.1
 	github.com/unrolled/secure v1.17.0
 	github.com/urfave/negroni v1.0.0

@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/alexedwards/scs/v2"
+	"github.com/lmittmann/tint"
 	"github.com/spf13/viper"
 	_ "modernc.org/sqlite"
 )
@@ -132,8 +133,8 @@ func (app *Application) StartServerWithGracefulShutdown(ctx context.Context) {
 }
 
 func (app *Application) setupLoggers() error {
-	app.InfoLog = slog.New(slog.NewJSONHandler(os.Stdout, nil))
-	app.ErrorLog = slog.New(slog.NewJSONHandler(os.Stderr, nil))
+	app.InfoLog = slog.New(tint.NewHandler(os.Stdout, nil))
+	app.ErrorLog = slog.New(tint.NewHandler(os.Stderr, nil))
 
 	environmentValue, err := app.GetConfigValueString("ENVIRONMENT")
 	if err != nil {
