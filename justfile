@@ -37,6 +37,11 @@ deploy: build
   @scp -i ${DEPLOY_KEY} ./build/serenitynow ${DEPLOY_USER}@${DEPLOY_HOST}:/usr/local/bin/serenitynow
   @ssh -i ${DEPLOY_KEY} ${DEPLOY_USER}@${DEPLOY_HOST} service serenitynow start
 
+# ssh into deploy server.
+[group('deployment')]
+ssh:
+  @ssh -i ${DEPLOY_KEY} ${DEPLOY_USER}@${DEPLOY_HOST}
+
 # open sqlite cli.
 [group('sql')]
 sql:
