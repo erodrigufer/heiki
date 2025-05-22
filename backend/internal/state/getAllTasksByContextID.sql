@@ -9,6 +9,6 @@ SELECT t.id, t.completed, t.priority, t.description, t.created_at,
     LEFT JOIN projects AS p ON pt.project_id = p.id 
     LEFT JOIN contexts_by_task AS ct ON t.id = ct.task_id
     LEFT JOIN contexts as c ON ct.context_id = c.id
-  WHERE t.completed = 0
+  WHERE ct.context_id = ?
   GROUP BY t.id
   ORDER BY t.completed, t.priority, t.due_at ASC NULLS LAST, t.description;

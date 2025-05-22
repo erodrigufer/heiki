@@ -28,15 +28,20 @@ templ taskFormatter(task types.Task) {
 			</span>
 		}
 		{ task.Description }
+		for _, context := range task.Contexts {
+			<span class="labels contexts">
+				{ "@" }
+				<a class="labels-anchor" href={ templ.URL(fmt.Sprintf("/contexts/%d", context.ID)) }>
+					{ context.Name }
+				</a>
+			</span>&nbsp;
+		}
 		for _, project := range task.Projects {
 			<span class="labels projects">
 				<a class="labels-anchor" href={ templ.URL(fmt.Sprintf("/projects/%d", project.ID)) }>
 					{ "+" }{ project.Name }
 				</a>
 			</span>&nbsp;
-		}
-		for _, context := range task.Contexts {
-			<span class="labels contexts">{ "@" }{ context.Name }</span>&nbsp;
 		}
 	</li>
 }

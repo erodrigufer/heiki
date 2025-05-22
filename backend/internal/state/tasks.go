@@ -33,6 +33,9 @@ var insertIntoContextsByTask string
 //go:embed getAllTasksByProjectID.sql
 var getAllTasksByProjectID string
 
+//go:embed getAllTasksByContextID.sql
+var getAllTasksByContextID string
+
 func (sm *StateManager) InsertTask(ctx context.Context, priority, description, dueDate string, projectID, contextID int) error {
 	var dueDatePtr *string
 	// If dueDate is an empty string, store a NULL value.
@@ -114,6 +117,19 @@ func (sm *StateManager) GetAllTasksByProjectID(ctx context.Context, projectID in
 	return allTasks, nil
 }
 
+func (sm *StateManager) GetAllTasksByContextID(ctx context.Context, contextID int) ([]types.Task, error) {
+	rows, err := sm.QueryContext(ctx, getAllTasksByContextID, contextID)
+	if err != nil {
+		return nil, fmt.Errorf("unable to get all tasks from db: %w", err)
+	}
+	allTasks, err := parseRowsToTasks(rows)
+	if err != nil {
+		return nil, fmt.Errorf("unable to parse tasks from rows: %w", err)
+	}
+
+	return allTasks, nil
+}
+
 func parseRowsToTasks(rows *sql.Rows) ([]types.Task, error) {
 	allTasks := make([]types.Task, 0)
 	defer rows.Close()
@@ -123,11 +139,14 @@ func parseRowsToTasks(rows *sql.Rows) ([]types.Task, error) {
 	var dueAtStr *string
 	var projectNamesStr *string
 	var projectIDsStr *string
+	var contextNamesStr *string
+	var contextIDsStr *string
 
 	for rows.Next() {
 		t := &types.Task{}
 		err := rows.Scan(&t.ID, &t.Completed, &t.Priority, &t.Description, &createdAtStr,
-			&completedAtStr, &dueAtStr, &projectNamesStr, &projectIDsStr)
+			&completedAtStr, &dueAtStr, &projectNamesStr, &projectIDsStr,
+			&contextNamesStr, &contextIDsStr)
 		if err != nil {
 			return nil, fmt.Errorf("row.Scan() failed: %w", err)
 		}
@@ -139,7 +158,13 @@ func parseRowsToTasks(rows *sql.Rows) ([]types.Task, error) {
 		if err != nil {
 			return nil, fmt.Errorf("unable to parse projects: %w", err)
 		}
+		contexts, err := parseContexts(contextNamesStr, contextIDsStr)
+		if err != nil {
+			return nil, fmt.Errorf("unable to parse contexts: %w", err)
+		}
+
 		tParsed.Projects = projects
+		tParsed.Contexts = contexts
 		allTasks = append(allTasks, tParsed)
 	}
 	return allTasks, nil
@@ -216,4 +241,34 @@ func parseProjects(concatenatedNames, concatenatedIDs *string) ([]types.Project,
 		projects = append(projects, project)
 	}
 	return projects, nil
+}
+
+func parseContexts(concatenatedNames, concatenatedIDs *string) ([]types.Context, error) {
+	if concatenatedNames == nil {
+		return []types.Context{}, nil
+	}
+	names := strings.Split(*concatenatedNames, ",")
+	if len(names) == 0 {
+		return []types.Context{}, nil
+	}
+	if concatenatedIDs == nil {
+		return []types.Context{}, nil
+	}
+	ids := strings.Split(*concatenatedIDs, ",")
+	if len(ids) == 0 {
+		return []types.Context{}, nil
+	}
+	contexts := make([]types.Context, 0)
+	for i, name := range names {
+		idInt, err := strconv.Atoi(ids[i])
+		if err != nil {
+			return []types.Context{}, fmt.Errorf("unable to convert id of context into int: %w", err)
+		}
+		context := types.Context{
+			ID:   idInt,
+			Name: name,
+		}
+		contexts = append(contexts, context)
+	}
+	return contexts, nil
 }
