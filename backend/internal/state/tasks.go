@@ -27,10 +27,13 @@ var updateCompletedTaskQuery string
 //go:embed insertIntoProjectsByTask.sql
 var insertIntoProjectsByTask string
 
+//go:embed insertIntoContextsByTask.sql
+var insertIntoContextsByTask string
+
 //go:embed getAllTasksByProjectID.sql
 var getAllTasksByProjectID string
 
-func (sm *StateManager) InsertTask(ctx context.Context, priority, description, dueDate string, projectID int) error {
+func (sm *StateManager) InsertTask(ctx context.Context, priority, description, dueDate string, projectID, contextID int) error {
 	var dueDatePtr *string
 	// If dueDate is an empty string, store a NULL value.
 	if dueDate == "" {
@@ -57,6 +60,13 @@ func (sm *StateManager) InsertTask(ctx context.Context, priority, description, d
 
 	if projectID != 0 {
 		_, err = tx.ExecContext(ctx, insertIntoProjectsByTask, int(taskID), projectID)
+		if err != nil {
+			return fmt.Errorf("unable to insert task in db: %w", err)
+		}
+	}
+
+	if contextID != 0 {
+		_, err = tx.ExecContext(ctx, insertIntoContextsByTask, int(taskID), contextID)
 		if err != nil {
 			return fmt.Errorf("unable to insert task in db: %w", err)
 		}

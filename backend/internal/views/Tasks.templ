@@ -2,18 +2,18 @@ package views
 
 import "github.com/erodrigufer/serenitynow/internal/types"
 
-templ TasksPageView(tasks []types.Task, projects []types.Project) {
+templ TasksPageView(tasks []types.Task, projects []types.Project, contexts []types.Context) {
 	@base(true) {
-		@TasksPageContent(tasks, projects)
+		@TasksPageContent(tasks, projects, contexts)
 	}
 }
 
-templ TasksPageContent(tasks []types.Task, projects []types.Project) {
+templ TasksPageContent(tasks []types.Task, projects []types.Project, contexts []types.Context) {
 	@taskList(tasks)
-	@taskSubmit(projects)
+	@taskSubmit(projects, contexts)
 }
 
-templ taskSubmit(projects []types.Project) {
+templ taskSubmit(projects []types.Project, contexts []types.Context) {
 	<form action="/tasks" method="POST">
 		<div>
 			<div>
@@ -37,6 +37,9 @@ templ taskSubmit(projects []types.Project) {
 			@projectsSelect(projects)
 		</div>
 		<div>
+			@contextsSelect(contexts)
+		</div>
+		<div>
 			<button>
 				Submit task
 			</button>
@@ -52,6 +55,18 @@ templ projectsSelect(projects []types.Project) {
 		<option value="0">No project</option>
 		for _, project := range projects {
 			<option value={ project.ID }>{ project.Name }</option>
+		}
+	</select>
+}
+
+templ contextsSelect(contexts []types.Context) {
+	<div>
+		<label for="context-select">Choose a context:</label>
+	</div>
+	<select id="context-select" name="context-id" required>
+		<option value="0">No context</option>
+		for _, context := range contexts {
+			<option value={ context.ID }>{ context.Name }</option>
 		}
 	</select>
 }

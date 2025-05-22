@@ -62,7 +62,13 @@ func (h *Handlers) GetAllTasksByProjectID() http.HandlerFunc {
 			return
 		}
 
-		err = web.RenderComponent(r.Context(), w, views.TasksPageView(tasks, projects))
+		contexts, err := h.sm.GetAllContexts(r.Context())
+		if err != nil {
+			web.HandleServerError(w, r, err, h.errorLog)
+			return
+		}
+
+		err = web.RenderComponent(r.Context(), w, views.TasksPageView(tasks, projects, contexts))
 		if err != nil {
 			web.HandleServerError(w, r, err, h.errorLog)
 			return
