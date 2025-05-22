@@ -1,0 +1,35 @@
+package views
+
+import "github.com/erodrigufer/serenitynow/internal/types"
+
+templ ContextsPageView(contexts []types.Context) {
+	@base(true) {
+		@ContextsPageContent(contexts)
+	}
+}
+
+templ ContextsPageContent(contexts []types.Context) {
+	@contextList(contexts)
+	@contextSubmit()
+}
+
+templ contextSubmit() {
+	<form action="/contexts" method="POST">
+		<div>
+			<input type="text" placeholder="Context name..." name="name" required/>
+		</div>
+		<div>
+			<button>
+				Submit context
+			</button>
+		</div>
+	</form>
+}
+
+templ contextList(contexts []types.Context) {
+	<ul>
+		for _, context := range contexts {
+			<li>{ context.Name } </li>
+		}
+	</ul>
+}
